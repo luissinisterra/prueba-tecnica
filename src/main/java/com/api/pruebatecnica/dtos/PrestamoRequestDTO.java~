@@ -9,4 +9,10 @@ public class PrestamoRequestDTO {
     private String isbn;
     private String idUsuario;
     private int tipoUsuario;
+
+    public PrestamoRequestDTO(String isbn, String idUsuario, int tipoUsuario) {
+        this.isbn = isbn;
+        this.idUsuario = idUsuario;
+        this.tipoUsuario = tipoUsuario;
+    }
 }

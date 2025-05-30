@@ -6,5 +6,5 @@ import com.api.pruebatecnica.dtos.PrestamoResponseDTO;
 
 public interface IPrestamoService {
     CreadoResponse crearPrestamo(PrestamoRequestDTO prestamoRequestDTO);
-    PrestamoResponseDTO obtenerPrestamo(Long idPrestamo);
+    PrestamoResponseDTO obtenePrestamo(Long idPrestamo);
 }

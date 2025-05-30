@@ -9,11 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PrestamoMapper {
 
-    // Si ambos son String, este mapeo es redundante pero puede ayudar a forzar la generación.
-    // Si la entidad lo guarda como "yyyy-MM-dd" y quieres "dd/MM/yyyy" aquí, MapStruct
-    // necesitaría una forma de hacer esa conversión de String a String con formato.
-    // Pero el error es por LocalDate, no por formato de String.
-    @Mapping(target = "fechaMaximaDevolucion", source = "fechaMaximaDevolucion") // Simple copia de String a String
     PrestamoResponseDTO toDTO(Prestamo prestamo);
 
     @Mapping(target = "id", ignore = true)

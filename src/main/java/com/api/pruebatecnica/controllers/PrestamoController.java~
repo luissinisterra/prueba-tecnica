@@ -18,7 +18,7 @@ public class PrestamoController {
     @PostMapping
     ResponseEntity<CreadoResponse> crearPrestamo(@RequestBody PrestamoRequestDTO prestamoRequestDTO) throws RuntimeException {
         CreadoResponse creadoResponse = this.prestamoService.crearPrestamo(prestamoRequestDTO);
-        return ResponseEntity.ok(creadoResponse);
+        return new ResponseEntity.ok(creadoResponse);
     }
 
     @GetMapping("/{idPrestamo}")
