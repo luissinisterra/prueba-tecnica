@@ -10,11 +10,9 @@ import com.api.pruebatecnica.services.imp.IPrestamoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.Optional;
 
 @Service
@@ -56,30 +54,6 @@ public class PrestamoService implements IPrestamoService {
         Prestamo nuevoPrestamo = prestamoRepository.save(prestamo);
 
         return new CreadoResponse(nuevoPrestamo.getId(), fechaFormateada);
-
-
-        /*if(prestamoRequestDTO.getTipoUsuario() == 1) {
-            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(10);
-            return this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
-        }
-
-        if(prestamoRequestDTO.getTipoUsuario() == 2) {
-            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(8);
-             return this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
-        }
-
-        if (prestamoRequestDTO.getTipoUsuario() == 3) {
-            Optional<Prestamo> prestamoUsuario = prestamoRepository.findByIdUsuario(prestamoRequestDTO.getIdUsuario());
-
-            if (prestamoUsuario.isPresent()) {
-                throw new RuntimeException("El usuario con identificacion " + prestamoRequestDTO.getIdUsuario() + " ya tiene un libro prestamo por lo cual no se le puede realizar otro préstamo.");
-            }
-
-            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(7);
-            return this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
-        }
-
-        return null;*/
     }
 
     private void validarInformacion(PrestamoRequestDTO prestamoRequestDTO) throws RuntimeException {
@@ -111,16 +85,6 @@ public class PrestamoService implements IPrestamoService {
 
         return fechaDevolucion;
     }
-
-    /*private CreadoResponse guardarPrestamo(PrestamoRequestDTO prestamoRequestDTO, LocalDate fechaMaximaDevolucion) {
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fechaFormateada = fechaMaximaDevolucion.format(formato);
-
-        Prestamo prestamo = new Prestamo(prestamoRequestDTO.getIsbn(), prestamoRequestDTO.getIdUsuario(), prestamoRequestDTO.getTipoUsuario(), fechaFormateada);
-        Prestamo nuevoPrestamo = prestamoRepository.save(prestamo);
-
-        return new CreadoResponse(nuevoPrestamo.getId(), fechaFormateada);
-    }*/
 
     @Override
     public PrestamoResponseDTO obtenerPrestamo(Long idPrestamo) throws RuntimeException{
