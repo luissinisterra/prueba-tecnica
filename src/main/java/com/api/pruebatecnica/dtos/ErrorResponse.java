@@ -1,0 +1,13 @@
+package com.api.pruebatecnica.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+public class ErrorResponse {
+    private String mensaje;
+
+    public ErrorResponse(String mensaje) {
+        this.mensaje = mensaje;
+    }
+}

@@ -4,6 +4,7 @@ import com.api.pruebatecnica.dtos.CreadoResponse;
 import com.api.pruebatecnica.dtos.PrestamoRequestDTO;
 import com.api.pruebatecnica.entities.Prestamo;
 import com.api.pruebatecnica.repositories.IPrestamoRepository;
+import com.api.pruebatecnica.services.imp.IPrestamoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,11 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PrestamoService {
+public class PrestamoService implements IPrestamoService {
 
     private final IPrestamoRepository prestamoRepository;
 
+    @Override
     public CreadoResponse crearPrestamo(PrestamoRequestDTO prestamoRequestDTO) {
 
         this.validarInformacion(prestamoRequestDTO);
@@ -44,7 +46,7 @@ public class PrestamoService {
         return null;
     }
 
-    private void validarInformacion(PrestamoRequestDTO prestamoRequestDTO) {
+    private void validarInformacion(PrestamoRequestDTO prestamoRequestDTO) throws RuntimeException {
         if (prestamoRequestDTO.getIsbn() > 10){
             throw new RuntimeException("El ISBN no puede ser mayor a 10 dígitos.");
         }
