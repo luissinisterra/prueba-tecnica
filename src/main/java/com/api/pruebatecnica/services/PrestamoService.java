@@ -1,0 +1,88 @@
+package com.api.pruebatecnica.services;
+
+import com.api.pruebatecnica.dtos.CreadoResponse;
+import com.api.pruebatecnica.dtos.PrestamoRequestDTO;
+import com.api.pruebatecnica.entities.Prestamo;
+import com.api.pruebatecnica.repositories.IPrestamoRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+@Service
+@AllArgsConstructor
+public class PrestamoService {
+
+    private final IPrestamoRepository prestamoRepository;
+
+    public CreadoResponse crearPrestamo(PrestamoRequestDTO prestamoRequestDTO) {
+
+        this.validarInformacion(prestamoRequestDTO);
+
+        if(prestamoRequestDTO.getTipoUsuario() == 1) {
+            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(10);
+            this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
+        }
+
+        if(prestamoRequestDTO.getTipoUsuario() == 2) {
+            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(8);
+            this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
+        }
+
+        if (prestamoRequestDTO.getTipoUsuario() == 3) {
+            Optional<Prestamo> prestamoUsuario = prestamoRepository.findByIdUsuario(prestamoRequestDTO.getIdUsuario());
+
+            if (prestamoUsuario.isPresent()) {
+                throw new RuntimeException("El usuario con identificacion " + prestamoRequestDTO.getIdUsuario() + " ya tiene un libro prestamo por lo cual no se le puede realizar otro préstamo.");
+            }
+
+            LocalDate fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(7);
+            this.guardarPrestamo(prestamoRequestDTO, fechaMaximaDevolucion);
+        }
+
+        return null;
+    }
+
+    private void validarInformacion(PrestamoRequestDTO prestamoRequestDTO) {
+        if (prestamoRequestDTO.getIsbn() > 10){
+            throw new RuntimeException("El ISBN no puede ser mayor a 10 dígitos.");
+        }
+
+        if (prestamoRequestDTO.getIdUsuario().length() > 10){
+            throw new RuntimeException("El ID de usuario no puede ser mayor a 10 dígitos.");
+        }
+
+        if (prestamoRequestDTO.getTipoUsuario() < 1 || prestamoRequestDTO.getTipoUsuario() > 3){
+            throw new RuntimeException("Tipo de usuario no permitido en la biblioteca.");
+        }
+    }
+
+    private LocalDate obtenerFechaMaximaDevolucion(int diasPrestacion) {
+        LocalDate fechaMaximaDevolucion = LocalDate.now();
+
+        int dias = diasPrestacion;
+        int contador = 1;
+        int diasAcumulados = 1;
+        while (contador <= dias) {
+            LocalDate fechaAux = LocalDate.now().plusDays(diasAcumulados);
+            if(fechaAux.getDayOfWeek().getValue() == 6 || fechaAux.getDayOfWeek().getValue() == 7) {
+                diasAcumulados++;
+                continue;
+            }
+            contador++;
+            diasAcumulados++;
+            fechaMaximaDevolucion.plusDays(1);
+        }
+        return fechaMaximaDevolucion;
+    }
+
+    private CreadoResponse guardarPrestamo(PrestamoRequestDTO prestamoRequestDTO, LocalDate fechaMaximaDevolucion) {
+        Prestamo prestamo = new Prestamo(prestamoRequestDTO.getIsbn(), prestamoRequestDTO.getIdUsuario(), prestamoRequestDTO.getTipoUsuario());
+        prestamo.setFechaMaximaDevolucion(fechaMaximaDevolucion);
+
+        Prestamo nuevoPrestamo = prestamoRepository.save(prestamo);
+        return new CreadoResponse(nuevoPrestamo.getId(), nuevoPrestamo.getFechaMaximaDevolucion());
+    }
+
+}

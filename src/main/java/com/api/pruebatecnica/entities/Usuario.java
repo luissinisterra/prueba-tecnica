@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Usuario {
     @Id
-    private Long id;
+    private String id;
     private String nombre;
-    private String tipoUsurio;
+    private String tipoUsuario;
 }
