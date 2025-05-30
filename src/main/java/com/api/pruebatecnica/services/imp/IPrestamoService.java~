@@ -1,0 +1,10 @@
+package com.api.pruebatecnica.services.imp;
+
+import com.api.pruebatecnica.dtos.CreadoResponse;
+import com.api.pruebatecnica.dtos.PrestamoRequestDTO;
+import com.api.pruebatecnica.dtos.PrestamoResponseDTO;
+
+public interface IPrestamoService {
+    CreadoResponse crearPrestamo(PrestamoRequestDTO prestamoRequestDTO);
+    PrestamoResponseDTO obtenePrestamo(Long idPrestamo);
+}
