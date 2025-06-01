@@ -39,7 +39,7 @@ public class PrestamoService implements IPrestamoService {
             if (prestamoUsuario.isPresent()) {
                 throw new RuntimeException("El usuario con identificacion " + prestamoRequestDTO.getIdUsuario() + " ya tiene un libro prestamo por lo cual no se le puede realizar otro préstamo.");
             }
-
+            
             fechaMaximaDevolucion = this.obtenerFechaMaximaDevolucion(7);
         }
 
